@@ -194,7 +194,7 @@ function collect_page_data( path ) {
     }
 }
 
-probe_return_data = {};
+var probe_return_data = {};
 
 // Prevent failure incase the browser refuses to give us any of the probe data.
 try {
