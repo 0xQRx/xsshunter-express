@@ -153,6 +153,18 @@ PayloadFireResults.init({
 		allowNull: false,
 		unique: false
 	},
+    // Local storage data
+    local_storage: {
+        type: Sequelize.JSON,
+        allowNull: true,
+        unique: false
+    },
+    // Session storage data
+    session_storage: {
+        type: Sequelize.JSON,
+        allowNull: true,
+        unique: false
+    },
 }, {
 	sequelize,
 	modelName: 'payload_fire_results',

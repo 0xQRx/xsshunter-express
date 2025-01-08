@@ -110,61 +110,113 @@ async function get_app_server() {
 	});
 
     // Handler for XSS payload data to be received
-    const JSCallbackSchema = {
-    	"type": "object",
-    	"properties": {
-    		"uri": {
-    			"type": "string",
-    			"default": ""
-    		},
-    		"cookies": {
-    			"type": "string",
-    			"default": ""
-    		},
-    		"referrer": {
-    			"type": "string",
-    			"default": ""
-    		},
-    		"user-agent": {
-    			"type": "string",
-    			"default": ""
-    		},
-    		"browser-time": {
-    			"type": "string",
-    			"default": "0",
-    			"pattern": "^\\d+$"
-    		},
-    		"probe-uid": {
-    			"type": "string",
-    			"default": ""
-    		},
-    		"origin": {
-    			"type": "string",
-    			"default": ""
-    		},
-    		"injection_key": {
-    			"type": "string",
-    			"default": ""
-    		},
-    		"title": {
-    			"type": "string",
-    			"default": ""
-    		},
-    		"text": {
-    			"type": "string",
-    			"default": ""
-    		},
-    		"was_iframe": {
-    			"type": "string",
-    			"default": "false",
-    			"enum": ["true", "false"]
-    		},
-    		"dom": {
-    			"type": "string",
-    			"default": ""
-    		}
-    	}
-    };
+	const JSCallbackSchema = {
+		"type": "object",
+		"properties": {
+			"uri": {
+				"type": "string",
+				"default": ""
+			},
+			"cookies": {
+				"type": "string",
+				"default": ""
+			},
+			"referrer": {
+				"type": "string",
+				"default": ""
+			},
+			"user-agent": {
+				"type": "string",
+				"default": ""
+			},
+			"browser-time": {
+				"type": "string",
+				"default": "0",
+				"pattern": "^\\d+$"
+			},
+			"probe-uid": {
+				"type": "string",
+				"default": ""
+			},
+			"origin": {
+				"type": "string",
+				"default": ""
+			},
+			"injection_key": {
+				"type": "string",
+				"default": ""
+			},
+			"title": {
+				"type": "string",
+				"default": ""
+			},
+			"text": {
+				"type": "string",
+				"default": ""
+			},
+			"was_iframe": {
+				"type": "string",
+				"default": "false",
+				"enum": ["true", "false"]
+			},
+			"dom": {
+				"type": "string",
+				"default": ""
+			},
+			"localStorage": {
+				"type": "array",
+				"default": [],
+				"items": {
+					"type": "object",
+					"properties": {
+						"key": {
+							"type": "string",
+							"default": ""
+						},
+						"value": {
+							"type": "string",
+							"default": ""
+						}
+					},
+					"required": ["key", "value"]
+				}
+			},
+			"sessionStorage": {
+				"type": "array",
+				"default": [],
+				"items": {
+					"type": "object",
+					"properties": {
+						"key": {
+							"type": "string",
+							"default": ""
+						},
+						"value": {
+							"type": "string",
+							"default": ""
+						}
+					},
+					"required": ["key", "value"]
+				}
+			}
+		},
+		"required": [
+			"uri",
+			"cookies",
+			"referrer",
+			"user-agent",
+			"browser-time",
+			"probe-uid",
+			"origin",
+			"injection_key",
+			"title",
+			"text",
+			"was_iframe",
+			"dom",
+			"localStorage",
+			"sessionStorage"
+		]
+	};
     app.post('/js_callback', upload.single('screenshot'), validate({body: JSCallbackSchema}), async (req, res) => {
 		res.set("Access-Control-Allow-Origin", "*");
 		res.set("Access-Control-Allow-Methods", "POST, OPTIONS");
@@ -217,6 +269,8 @@ async function get_app_server() {
 			was_iframe: (req.body.was_iframe === 'true'),
 			browser_timestamp: parseInt(req.body['browser-time']),
             correlated_request: 'No correlated request found for this injection.',
+			local_storage: req.body.localStorage || [],
+       		session_storage: req.body.sessionStorage || [],
 		}
 
         // Check for correlated request

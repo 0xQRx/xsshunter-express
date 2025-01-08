@@ -102,6 +102,42 @@
                                         </div>
                                         <hr />
                                     </div>
+                                    <!-- Local Sorage and Sessions Storage START -->
+                                    <div>
+                                        <div>
+                                            <p class="report-section-label mr-2">Local Storage</p>
+                                            <small slot="helperText" class="form-text text-muted report-section-description">
+                                                Captured local storage data from the victim's browser.
+                                            </small>
+                                        </div>
+                                        <div class="m-2 mt-4">
+                                            <ul v-if="report.local_storage && report.local_storage.length">
+                                                <li v-for="(item, index) in report.local_storage" :key="index">
+                                                    <strong>{{ item.key }}:</strong> <code>{{ item.value }}</code>
+                                                </li>
+                                            </ul>
+                                            <pre v-else><i>None</i></pre>
+                                        </div>
+                                        <hr />
+                                    </div>
+                                    <div>
+                                        <div>
+                                            <p class="report-section-label mr-2">Session Storage</p>
+                                            <small slot="helperText" class="form-text text-muted report-section-description">
+                                                Captured session storage data from the victim's browser.
+                                            </small>
+                                        </div>
+                                        <div class="m-2 mt-4">
+                                            <ul v-if="report.session_storage && report.session_storage.length">
+                                                <li v-for="(item, index) in report.session_storage" :key="index">
+                                                    <strong>{{ item.key }}:</strong> <code>{{ item.value }}</code>
+                                                </li>
+                                            </ul>
+                                            <pre v-else><i>None</i></pre>
+                                        </div>
+                                        <hr />
+                                    </div>
+                                    <!-- Local Sorage and Sessions Storage END -->
                                     <div>
                                         <div>
                                             <p class="report-section-label mr-2">Title</p>
