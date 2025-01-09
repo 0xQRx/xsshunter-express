@@ -177,8 +177,7 @@ async function get_app_server() {
 							"type": "string",
 							"default": ""
 						}
-					},
-					"required": ["key", "value"]
+					}
 				}
 			},
 			"sessionStorage": {
@@ -195,27 +194,10 @@ async function get_app_server() {
 							"type": "string",
 							"default": ""
 						}
-					},
-					"required": ["key", "value"]
+					}
 				}
 			}
-		},
-		"required": [
-			"uri",
-			"cookies",
-			"referrer",
-			"user-agent",
-			"browser-time",
-			"probe-uid",
-			"origin",
-			"injection_key",
-			"title",
-			"text",
-			"was_iframe",
-			"dom",
-			"localStorage",
-			"sessionStorage"
-		]
+		}
 	};
     app.post('/js_callback', upload.single('screenshot'), validate({body: JSCallbackSchema}), async (req, res) => {
 		res.set("Access-Control-Allow-Origin", "*");
