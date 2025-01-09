@@ -543,7 +543,7 @@ async function set_up_api_server(app) {
 
         // Intentionally no URL validation incase people want to do
         // data: for inline extra JS.
-        if(req.body.chainload_uri) {
+        if(req.body.chainload_uri !== undefined) {
             await update_settings_value(
                 constants.CHAINLOAD_URI_SETTINGS_KEY,
                 req.body.chainload_uri
