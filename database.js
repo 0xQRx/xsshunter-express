@@ -6,11 +6,11 @@ const get_hashed_password = require('./utils.js').get_hashed_password;
 const constants = require('./constants.js');
 
 const sequelize = new Sequelize(
-	process.env.DATABASE_NAME,
-	process.env.DATABASE_USER,
-	process.env.DATABASE_PASSWORD,
+	"xsshunterexpress",
+	"xsshunterexpress",
+	"xsshunterexpress",
 	{
-		host: process.env.DATABASE_HOST,
+		host: "localhost",
 		dialect: 'postgres',
 		benchmark: true,
 		logging: true
@@ -153,6 +153,17 @@ PayloadFireResults.init({
 		allowNull: false,
 		unique: false
 	},
+	local_storage: {
+        type: Sequelize.JSON,
+        allowNull: true,
+        unique: false
+    },
+    // Session storage data
+    session_storage: {
+        type: Sequelize.JSON,
+        allowNull: true,
+        unique: false
+    },
 }, {
 	sequelize,
 	modelName: 'payload_fire_results',
@@ -201,7 +212,17 @@ PayloadFireResults.init({
 			unique: false,
 			fields: ['browser_timestamp'],
 			method: 'BTREE',
-		}
+		},
+		// {
+		// 	unique: false,
+		// 	fields: ['local_storage'],
+		// 	using: 'gin', // Use GIN for JSON indexing
+		// },
+		// {
+		// 	unique: false,
+		// 	fields: ['session_storage'],
+		// 	using: 'gin', // Use GIN for JSON indexing
+		// },
 	]
 });
 

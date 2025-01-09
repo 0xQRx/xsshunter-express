@@ -21,7 +21,7 @@ const validate = require('express-jsonschema').validate;
 const get_hashed_password = require('./utils.js').get_hashed_password;
 const get_secure_random_string = require('./utils.js').get_secure_random_string;
 
-const SCREENSHOTS_DIR = path.resolve(process.env.SCREENSHOTS_DIR);
+const SCREENSHOTS_DIR = path.resolve("/root/Desktop/xsshunter-dev/xsshunter-express/screenshots");
 
 var sessions_middleware = false;
 var sessions_settings_object = {
@@ -30,7 +30,7 @@ var sessions_settings_object = {
     activeDuration: 1000 * 60 * 5, // Extend for five minutes if actively used
     cookie: {
         httpOnly: true,
-        secure: true
+        secure: false
     }
 }
 function session_wrapper_function(req, res, next) {
@@ -272,10 +272,20 @@ async function set_up_api_server(app) {
     		order: [['createdAt', 'DESC']],
     	});
 
+        // Parse local_storage and session_storage
+        const parsed_payload_fires = payload_fires.rows.map((payload_fire) => {
+            const parsed_data = {
+                ...payload_fire.toJSON(), // Convert Sequelize model instance to a plain object
+                local_storage: JSON.parse(payload_fire.local_storage || '[]'),
+                session_storage: JSON.parse(payload_fire.session_storage || '[]'),
+            };
+            return parsed_data;
+        });
+
         res.status(200).json({
             'success': true,
             'result': {
-            	'payload_fires': payload_fires.rows,
+            	'payload_fires': parsed_payload_fires,
             	'total': payload_fires.count
             }
         }).end();
@@ -533,7 +543,7 @@ async function set_up_api_server(app) {
 
         // Intentionally no URL validation incase people want to do
         // data: for inline extra JS.
-        if(req.body.chainload_uri) {
+        if(req.body.chainload_uri !== undefined) {
             await update_settings_value(
                 constants.CHAINLOAD_URI_SETTINGS_KEY,
                 req.body.chainload_uri

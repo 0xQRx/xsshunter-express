@@ -12,3 +12,8 @@ ssldata/*
 config.env
 payload-fire-images/*.gz
 payload-fire-images/*.png
+node_modules/
+front-end/node_modules
+front-end/dist
+greenlock.d
+screenshots/*

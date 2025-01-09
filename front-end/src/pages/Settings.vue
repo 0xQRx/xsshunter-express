@@ -39,6 +39,9 @@
                             <base-button type="primary" v-on:click="update_chainload_uri">
                                 <i class="far fa-save"></i> Save JavaScript URL
                             </base-button>
+                            <base-button type="danger" v-on:click="clear_chainload_uri" class="ml-2">
+                                <i class="fas fa-trash-alt"></i> Clear JavaScript URL
+                            </base-button>
                         </card>
                         <card>
                             <h4 class="card-title">Pages to Collect on Payload Fire</h4>
@@ -209,6 +212,11 @@ export default {
             await api_request.set_chainload_uri(this.chainload_uri);
             await this.pull_latest_settings();
             toastr.success('Your chainload URI has been updated.', 'Chainload URI Updated')
+        },
+        clear_chainload_uri: async function() {
+            await api_request.set_chainload_uri("");
+            await this.pull_latest_settings();
+            toastr.success('Your chainload URI has been cleared.', 'Chainload URI Cleared');
         },
         set_email_reporting: async function() {
             await api_request.set_email_alerts(!this.send_alert_emails);
