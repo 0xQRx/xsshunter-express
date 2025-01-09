@@ -164,38 +164,12 @@ async function get_app_server() {
 				"default": ""
 			},
 			"localStorage": {
-				"type": "array",
-				"default": [],
-				"items": {
-					"type": "object",
-					"properties": {
-						"key": {
-							"type": "string",
-							"default": ""
-						},
-						"value": {
-							"type": "string",
-							"default": ""
-						}
-					}
-				}
+			"type": "string",
+			"default": "[]"
 			},
 			"sessionStorage": {
-				"type": "array",
-				"default": [],
-				"items": {
-					"type": "object",
-					"properties": {
-						"key": {
-							"type": "string",
-							"default": ""
-						},
-						"value": {
-							"type": "string",
-							"default": ""
-						}
-					}
-				}
+				"type": "string",
+				"default": "[]"
 			}
 		}
 	};

@@ -272,10 +272,20 @@ async function set_up_api_server(app) {
     		order: [['createdAt', 'DESC']],
     	});
 
+        // Parse local_storage and session_storage
+        const parsed_payload_fires = payload_fires.rows.map((payload_fire) => {
+            const parsed_data = {
+                ...payload_fire.toJSON(), // Convert Sequelize model instance to a plain object
+                local_storage: JSON.parse(payload_fire.local_storage || '[]'),
+                session_storage: JSON.parse(payload_fire.session_storage || '[]'),
+            };
+            return parsed_data;
+        });
+
         res.status(200).json({
             'success': true,
             'result': {
-            	'payload_fires': payload_fires.rows,
+            	'payload_fires': parsed_payload_fires,
             	'total': payload_fires.count
             }
         }).end();

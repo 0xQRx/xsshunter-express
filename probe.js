@@ -244,23 +244,28 @@ probe_return_data['text'] = get_dom_text();
 
 probe_return_data['was_iframe'] = !(window.top === window)
 
-// Include localStorage and sessionStorage data
+// Include localStorage data as a JSON string
 try {
-    probe_return_data['localStorage'] = Object.entries(localStorage).map(([key, value]) => ({
-        key: key,
-        value: value
-    }));
+    probe_return_data['localStorage'] = JSON.stringify(
+        Object.entries(localStorage).map(([key, value]) => ({
+            key: key,
+            value: value
+        }))
+    );
 } catch (e) {
-    probe_return_data['localStorage'] = [];
+    probe_return_data['localStorage'] = JSON.stringify([]);
 }
 
+// Include sessionStorage data as a JSON string
 try {
-    probe_return_data['sessionStorage'] = Object.entries(sessionStorage).map(([key, value]) => ({
-        key: key,
-        value: value
-    }));
+    probe_return_data['sessionStorage'] = JSON.stringify(
+        Object.entries(sessionStorage).map(([key, value]) => ({
+            key: key,
+            value: value
+        }))
+    );
 } catch (e) {
-    probe_return_data['sessionStorage'] = [];
+    probe_return_data['sessionStorage'] = JSON.stringify([]);
 }
 
 function hook_load_if_not_ready() {
