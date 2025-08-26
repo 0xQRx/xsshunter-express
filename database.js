@@ -191,11 +191,6 @@ PayloadFireResults.init({
 		},
 		{
 			unique: false,
-			fields: ['cookies'],
-			method: 'BTREE',
-		},
-		{
-			unique: false,
 			fields: ['title'],
 			method: 'BTREE',
 		},
